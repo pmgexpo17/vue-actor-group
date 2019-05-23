@@ -1,6 +1,6 @@
 {
   "name": "vue-actor-group",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A vuejs model package, for rendering view attributes",
   "main": "dist/vue-actor-group.js",
   "scripts": {

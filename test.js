@@ -2,13 +2,7 @@ import { equal } from 'assert'
 import pixelWidth from 'string-pixel-width'
 import factory from './index'
 
-const USER_FRED = {
-  id: 12345,
-  firstName: 'Fred',
-  lastName: 'Flintstone'
-}
-
-const actorName = 'SvgActor1'
+const actorName = ['SvgActor1','SvgActor2','SvgActor3']
 
 const defaultLayout = {
   leftOffset: 40,
@@ -20,15 +14,19 @@ const defaultLayout = {
 
 describe('vue-actor-group', function () {
 
-  let actor = factory.new(actorName, defaultLayout)
-  let labelWidth = defaultLayout.leftPad * 2 + pixelWidth(actorName, { size: defaultLayout.fontSize })
+  let actor1 = factory.new(actorName[0], defaultLayout)
+  let actor2 = factory.new(actorName[1], defaultLayout, actor1)
+  console.log('name : '  + actor2.name + ' , sibling : ' + actor2.siblingL.name)
+  let actor = factory.new(actorName[2], defaultLayout, actor2)
+  console.log('name : '  + actor.name + ' , sibling : ' + actor.siblingL.name)
+  let labelWidth = defaultLayout.leftPad * 2 + pixelWidth(actorName[2], { size: defaultLayout.fontSize })
   let labelHeight = defaultLayout.fontSize + defaultLayout.topPad * 2
   let labelXOffset = defaultLayout.leftOffset + labelWidth
   let textPosX = defaultLayout.leftOffset + defaultLayout.leftPad
   let textPosY = defaultLayout.topOffset + defaultLayout.topPad + defaultLayout.fontSize
 
   it('should create a new actor', function () {
-    equal(actor.name, actorName)
+    equal(actor.name, actorName[2])
   })
 
   it('should calculate svg label width', function () {

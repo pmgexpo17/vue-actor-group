@@ -11,7 +11,9 @@ class SvgActor {
   }
 
   get labelWidth() {
-    return this.layout.leftPad * 2 + pixelWidth(this.name, { size: this.layout.fontSize })
+    let textWidth = Math.ceil(pixelWidth(this.name, { size: this.layout.fontSize }))
+    console.log('textWidth : ' + textWidth)
+    return this.layout.leftPad * 2 + textWidth
   }
 
   get labelHeight() {
@@ -24,10 +26,10 @@ class SvgActor {
 
   get leftOffset() {
     let leftOffset = this.layout.leftOffset
-    let siblingL = this.siblingL
-    while (siblingL) {
-      leftOffset += siblingL.labelXOffset
-      siblingL = this.siblingL
+    let nextActor = this.siblingL
+    while (nextActor) {
+      leftOffset += nextActor.labelXOffset
+      nextActor = nextActor.siblingL
     }
     this._leftOffset = leftOffset
     return leftOffset
