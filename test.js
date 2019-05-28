@@ -5,21 +5,24 @@ import factory from './index'
 const actorName = ['SvgActor1','SvgActor2','SvgActor3']
 
 const layout = {
-  halfBodyWidth: 20,
-  initBodyHeight: 180,
+  arrowHeadSize: 7,
   fontSize: 16,  
+  halfBodyWidth: 10,
+  initBodyHeight: 180,
   leftOffset: 40,
   leftPad: 5,
   topOffset: 20,
-  topPad: 5
+  topPad: 5,
+  strokeWidth: 2
 }
 
 describe('vue-actor-group', function () {
 
-  let actor1 = factory.new(actorName[0], layout)
-  let actor2 = factory.new(actorName[1], layout, actor1)
+  factory.setLayout(layout)
+  let actor1 = factory.new(actorName[0])
+  let actor2 = factory.new(actorName[1], actor1)
   console.log('name : '  + actor2.name + ' , sibling : ' + actor2.siblingL.name)
-  let actor = factory.new(actorName[2], layout, actor2)
+  let actor = factory.new(actorName[2], actor2)
   console.log('name : '  + actor.name + ' , sibling : ' + actor.siblingL.name)
   console.log(actor.name + ' , halfLabelWidth : ' + actor._halfLabelWidth)
   let labelWidth = layout.leftPad * 2 + Math.floor(pixelWidth(actor.name, { size: layout.fontSize }))
@@ -30,6 +33,10 @@ describe('vue-actor-group', function () {
 
   it('should create a new actor', function () {
     equal(actor.name, actorName[2])
+  })
+
+  it('should calculate svg arrow start x', function () {
+    equal(actor.arrowX1, actor._centerX + layout.halfBodyWidth)
   })
 
   it('should calculate svg actor body height', function () {

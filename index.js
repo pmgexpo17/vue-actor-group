@@ -1,14 +1,23 @@
 import pixelWidth from 'string-pixel-width'
 
 class SvgActor {
-  constructor(name, layout, siblingL) {
+  constructor(name, siblingL, layout=null) {
     this.name = name
-    this.layout = layout    
     this.siblingL = siblingL
     this.states = []
     this.transitions = {}
     this._halfLabelWidth = Math.floor(this.rawLabelWidth() / 2)
     this._centerX = this.centerX
+    if (layout) 
+      this.layout = layout
+  }
+
+  get arrowX1() {
+    return this._centerX + this.layout.halfBodyWidth
+  }
+
+  get bodyHeight() {
+    return this.layout.initBodyHeight - this.labelHeight
   }
 
   get bodyHeight() {
@@ -76,27 +85,21 @@ class SvgActor {
   }
 
   textY (relOffset) {
-    return this.layout.topOffset + this.layout.fontSize + relOffset + 2
-  }
-
-  spanLog(nextActor) {
-    const _spanLog = {}
-    const span = 0
-    while (nextActor) {
-      if (nextActor.siblingL)
-        _spanLog[nextActor.siblingL.name] = nextActor.centerX - nextActor.siblingL.centerX
-      nextActor = nextActor.siblingL
-    }
-    return _spanLog
+    return this.layout.topOffset + this.layout.strokeWidth + this.layout.fontSize + relOffset
   }
 }
 
+/*
+  * SvgActor factory
+  */
 let factory = {
-  /*
-   * SvgActor factory
-   */
-  new: function(name, layout, siblingL=null) {  
-    return new SvgActor(name, layout, siblingL)
+  // use prototype instead of a static property, set at startup
+  setLayout: function(layout) {
+    SvgActor.prototype.layout = layout
+  },
+
+  new: function(name, siblingL=null, layout=null) {  
+    return new SvgActor(name, siblingL, layout)
   }
 }
 
