@@ -1,11 +1,11 @@
 {
   "name": "vue-actor-group",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A vuejs model package, for rendering view attributes",
   "main": "dist/vue-actor-group.js",
   "scripts": {
     "test": "karma start --single-run",
-    "build": "webpack && MINIFY=1 webpack",
+    "build": "webpack --mode production",
     "preversion": "npm test",
     "version": "npm run build && git add -A dist/",
     "postversion": "git push && git push --tags"

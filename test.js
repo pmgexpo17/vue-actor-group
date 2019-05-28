@@ -62,7 +62,7 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg actor label width', function () {
-    equal(actor.labelWidth(), labelWidth)
+    equal(actor.labelWidth, labelWidth)
   })
 
   it('should calculate svg actor labelX', function () {
