@@ -24,7 +24,7 @@ describe('vue-actor-group', function () {
   console.log('name : '  + actor2.name + ' , sibling : ' + actor2.siblingL.name)
   let actor = factory.new(actorName[2], actor2)
   console.log('name : '  + actor.name + ' , sibling : ' + actor.siblingL.name)
-  console.log(actor.name + ' , halfLabelWidth : ' + actor._halfLabelWidth)
+  console.log(actor.name + ' , halfLabelWidth : ' + actor.halfLabelWidth)
   let labelWidth = layout.leftPad * 2 + Math.floor(pixelWidth(actor.name, { size: layout.fontSize }))
   let labelHeight = layout.fontSize + layout.topPad * 2
   let leftOffset = layout.leftOffset + actor2.labelXOffset + actor1.labelXOffset
@@ -36,7 +36,7 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg arrow start x', function () {
-    equal(actor.arrowX1, actor._centerX + layout.halfBodyWidth)
+    equal(actor.arrowX1, actor.centerX + layout.halfBodyWidth)
   })
 
   it('should calculate svg actor body height', function () {
@@ -94,7 +94,7 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg actor textY', function () {
-    const textY = layout.topOffset + layout.fontSize + 2
+    const textY = layout.topOffset + layout.fontSize + layout.topPad - layout.strokeWidth
     equal(actor.textY(0), textY)
   })
 })

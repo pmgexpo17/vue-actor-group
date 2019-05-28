@@ -6,14 +6,13 @@ class SvgActor {
     this.siblingL = siblingL
     this.states = []
     this.transitions = {}
-    this._halfLabelWidth = Math.floor(this.rawLabelWidth() / 2)
-    this._centerX = this.centerX
-    if (layout) 
-      this.layout = layout
-  }
+    if (layout) this.layout = layout
+    this.halfLabelWidth = Math.floor(this.evalLabelWidth() / 2)
+    this.centerX = this.evalCenterX
+    }
 
   get arrowX1() {
-    return this._centerX + this.layout.halfBodyWidth
+    return this.centerX + this.layout.halfBodyWidth
   }
 
   get bodyHeight() {
@@ -29,15 +28,15 @@ class SvgActor {
   }
 
   get bodyX() {
-    return this._centerX - this.layout.halfBodyWidth
+    return this.centerX - this.layout.halfBodyWidth
   }
   
   get bodyY() {
     return this.centerY(0) + 10
   }
 
-  get centerX() {
-    return this.leftOffset + this._halfLabelWidth
+  get evalCenterX() {
+    return this.leftOffset + this.halfLabelWidth
   }
 
   centerY (relOffset) {
@@ -49,10 +48,10 @@ class SvgActor {
   }
 
   get labelWidth() {
-    return this._halfLabelWidth * 2
+    return this.halfLabelWidth * 2
   }
 
-  rawLabelWidth (labelText=this.name) {
+  evalLabelWidth (labelText=this.name) {
     let textWidth = Math.floor(pixelWidth(labelText, { size: this.layout.fontSize }))
     return this.layout.leftPad * 2 + textWidth
   }
@@ -62,7 +61,7 @@ class SvgActor {
   }
 
   get labelXOffset() {
-    return this.layout.leftOffset + this._halfLabelWidth * 2
+    return this.layout.leftOffset + this.halfLabelWidth * 2
   }
 
   labelY (relOffset) {
@@ -81,11 +80,11 @@ class SvgActor {
   }
 
   get textX() {
-    return this._centerX - this._halfLabelWidth  + this.layout.leftPad
+    return this.centerX - this.halfLabelWidth  + this.layout.leftPad
   }
 
   textY (relOffset) {
-    return this.layout.topOffset + this.layout.strokeWidth + this.layout.fontSize + relOffset
+    return this.layout.topOffset + this.layout.fontSize + this.layout.topPad - this.layout.strokeWidth + relOffset
   }
 }
 
