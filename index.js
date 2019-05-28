@@ -3,25 +3,59 @@ import pixelWidth from 'string-pixel-width'
 class SvgActor {
   constructor(name, layout, siblingL) {
     this.name = name
-    this.layout = layout
+    this.layout = layout    
     this.siblingL = siblingL
     this.states = []
     this.transitions = {}
-    this._leftOffset = 0 // stores computed value
+    this._halfLabelWidth = Math.floor(this.labelWidth() / 2)
+    this._centerX = this.centerX
   }
 
-  get labelWidth() {
-    let textWidth = Math.ceil(pixelWidth(this.name, { size: this.layout.fontSize }))
-    console.log('textWidth : ' + textWidth)
-    return this.layout.leftPad * 2 + textWidth
+  get bodyHeight() {
+    return this.layout.initBodyHeight - this.labelHeight
+  }
+
+  get bodyWidth() {
+    return this.layout.halfBodyWidth * 2
+  }
+
+  get bodyX() {
+    return this._centerX - this.layout.halfBodyWidth
+  }
+  
+  get bodyY() {
+    return this.centerY(0) + 10
+  }
+
+  get centerX() {
+    return this.leftOffset + this._halfLabelWidth
+  }
+
+  get centerY() {
+    return (relOffset) => this.layout.topOffset + this.labelHeight + relOffset
   }
 
   get labelHeight() {
     return this.layout.fontSize + this.layout.topPad * 2
   }
 
+  get labelWidth() {
+    return (labelText=this.name) => {
+      let textWidth = Math.floor(pixelWidth(labelText, { size: this.layout.fontSize }))
+      return this.layout.leftPad * 2 + textWidth
+    }
+  }
+
+  get labelX() {
+    return this.leftOffset
+  }
+
   get labelXOffset() {
-    return this.layout.leftOffset + this.labelWidth
+    return this.layout.leftOffset + this._halfLabelWidth * 2
+  }
+
+  get labelY() {
+    return (relOffset) => this.layout.topOffset + relOffset
   }
 
   get leftOffset() {
@@ -35,18 +69,23 @@ class SvgActor {
     return leftOffset
   }
 
-  get topOffset() {
-    return this.layout.topOffset
+  get textX() {
+    return this._centerX - this._halfLabelWidth  + this.layout.leftPad
   }
 
-  get textPosX() {
-    let leftOffset = this._leftOffset
-    this._leftOffset = 0
-    return leftOffset + this.layout.leftPad
+  get textY() {
+    return (relOffset) => this.layout.topOffset + this.layout.fontSize + relOffset + 2
   }
 
-  get textPosY() {
-    return this.topOffset + this.layout.topPad + this.layout.fontSize
+  spanLog(nextActor) {
+    const _spanLog = {}
+    const span = 0
+    while (nextActor) {
+      if (nextActor.siblingL)
+        _spanLog[nextActor.siblingL.name] = nextActor.centerX - nextActor.siblingL.centerX
+      nextActor = nextActor.siblingL
+    }
+    return _spanLog
   }
 }
 

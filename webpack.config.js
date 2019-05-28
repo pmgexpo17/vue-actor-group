@@ -1,4 +1,3 @@
-var webpack = require('webpack')
 var fileName = require('./package').name
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');

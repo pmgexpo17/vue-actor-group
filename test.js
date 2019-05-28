@@ -4,9 +4,11 @@ import factory from './index'
 
 const actorName = ['SvgActor1','SvgActor2','SvgActor3']
 
-const defaultLayout = {
+const layout = {
+  halfBodyWidth: 20,
+  initBodyHeight: 180,
+  fontSize: 16,  
   leftOffset: 40,
-  fontSize: 16,
   leftPad: 5,
   topOffset: 20,
   topPad: 5
@@ -14,47 +16,78 @@ const defaultLayout = {
 
 describe('vue-actor-group', function () {
 
-  let actor1 = factory.new(actorName[0], defaultLayout)
-  let actor2 = factory.new(actorName[1], defaultLayout, actor1)
+  let actor1 = factory.new(actorName[0], layout)
+  let actor2 = factory.new(actorName[1], layout, actor1)
   console.log('name : '  + actor2.name + ' , sibling : ' + actor2.siblingL.name)
-  let actor = factory.new(actorName[2], defaultLayout, actor2)
+  let actor = factory.new(actorName[2], layout, actor2)
   console.log('name : '  + actor.name + ' , sibling : ' + actor.siblingL.name)
-  let labelWidth = defaultLayout.leftPad * 2 + pixelWidth(actorName[2], { size: defaultLayout.fontSize })
-  let labelHeight = defaultLayout.fontSize + defaultLayout.topPad * 2
-  let labelXOffset = defaultLayout.leftOffset + labelWidth
-  let textPosX = defaultLayout.leftOffset + defaultLayout.leftPad
-  let textPosY = defaultLayout.topOffset + defaultLayout.topPad + defaultLayout.fontSize
+  console.log(actor.name + ' , halfLabelWidth : ' + actor._halfLabelWidth)
+  let labelWidth = layout.leftPad * 2 + Math.floor(pixelWidth(actor.name, { size: layout.fontSize }))
+  let labelHeight = layout.fontSize + layout.topPad * 2
+  let leftOffset = layout.leftOffset + actor2.labelXOffset + actor1.labelXOffset
+  let centerX = leftOffset + Math.floor(labelWidth / 2)
+  let centerY = layout.topOffset + labelHeight
 
   it('should create a new actor', function () {
     equal(actor.name, actorName[2])
   })
 
-  it('should calculate svg label width', function () {
-    equal(actor.labelWidth, labelWidth)
+  it('should calculate svg actor body height', function () {
+    const bodyHeight = layout.initBodyHeight - (layout.fontSize + layout.topPad * 2)
+    equal(actor.bodyHeight, bodyHeight)
   })
 
-  it('should calculate svg label height', function () {
+  it('should calculate svg actor body width', function () {
+    equal(actor.bodyWidth, layout.halfBodyWidth * 2)
+  })
+
+  it('should calculate svg actor bodyX', function () {
+    equal(actor.bodyX, centerX - layout.halfBodyWidth)
+  })
+
+  it('should calculate svg actor bodyY', function () {
+    equal(actor.bodyY, centerY + 10)
+  })
+
+  it('should calculate svg actor centerX', function () {
+    equal(actor.centerX, centerX)
+  })
+
+  it('should calculate svg actor centerY', function () {
+    equal(actor.centerY(0), centerY)
+  })
+
+  it('should calculate svg actor label height', function () {
     equal(actor.labelHeight, labelHeight)
   })
 
-  it('should calculate svg label left offset', function () {
-    equal(actor.labelXOffset, labelXOffset)
+  it('should calculate svg actor label width', function () {
+    equal(actor.labelWidth(), labelWidth)
   })
 
-  it('should calculate svg left offset', function () {
-    equal(actor.leftOffset, defaultLayout.leftOffset)
+  it('should calculate svg actor labelX', function () {
+    equal(actor.labelX, leftOffset)
   })
 
-  it('should calculate svg top offset', function () {
-    equal(actor.topOffset, defaultLayout.topOffset)
+  it('should calculate svg actor labelXOffset', function () {
+    equal(actor.labelXOffset, layout.leftOffset + labelWidth)
   })
 
-  it('should calculate svg label text pos x', function () {
-    equal(actor.textPosX, textPosX)
+  it('should calculate svg actor labelY', function () {
+    equal(actor.labelY(0), layout.topOffset)
   })
 
-  it('should calculate svg label text pos y', function () {
-    equal(actor.textPosY, textPosY)
+  it('should calculate svg actor left offset', function () {
+    equal(actor.leftOffset, leftOffset)
   })
 
+  it('should calculate svg actor textX', function () {
+    const textX = centerX - Math.ceil(labelWidth / 2) + layout.leftPad
+    equal(actor.textX,  textX)
+  })
+
+  it('should calculate svg actor textY', function () {
+    const textY = layout.topOffset + layout.fontSize + 2
+    equal(actor.textY(0), textY)
+  })
 })
