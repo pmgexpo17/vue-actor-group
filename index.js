@@ -40,7 +40,7 @@ class SvgActor {
   }
 
   centerY (relOffset) {
-    return this.layout.topOffset + this.labelHeight + relOffset
+    return this.layout.topMargin + this.labelHeight + relOffset
   }
 
   get labelHeight() {
@@ -61,21 +61,20 @@ class SvgActor {
   }
 
   get labelXOffset() {
-    return this.layout.leftOffset + this.labelWidth
+    return this.layout.leftMargin + this.labelWidth
   }
 
   labelY (relOffset) {
-    return this.layout.topOffset + relOffset
+    return this.layout.topMargin + relOffset
   }
 
   get leftOffset() {
-    let leftOffset = this.layout.leftOffset
+    let leftOffset = this.layout.leftMargin
     let nextActor = this.siblingL
     while (nextActor) {
       leftOffset += nextActor.labelXOffset
       nextActor = nextActor.siblingL
     }
-    this._leftOffset = leftOffset
     return leftOffset
   }
 
@@ -84,7 +83,7 @@ class SvgActor {
   }
 
   textY (relOffset) {
-    return this.layout.topOffset + this.layout.fontSize + this.layout.topPad - this.layout.strokeWidth + relOffset
+    return this.layout.topMargin + this.layout.fontSize + this.layout.topPad - this.layout.strokeWidth + relOffset
   }
 }
 

@@ -11,9 +11,9 @@ const layout = {
   fontSize: 16,  
   halfBodyWidth: 10,
   initBodyHeight: 180,
-  leftOffset: 40,
+  leftMargin: 40,
   leftPad: 5,
-  topOffset: 20,
+  topMargin: 20,
   topPad: 5,
   strokeWidth: 2
 }
@@ -29,9 +29,9 @@ describe('vue-actor-group', function () {
   console.log(actor.name + ' , halfLabelWidth : ' + actor.halfLabelWidth)
   let labelWidth = layout.leftPad * 2 + Math.floor(pixelWidth(actor.name, { font: layout.font, size: layout.fontSize }))
   let labelHeight = layout.fontSize + layout.topPad * 2
-  let leftOffset = layout.leftOffset + actor2.labelXOffset + actor1.labelXOffset
+  let leftOffset = layout.leftMargin + actor2.labelXOffset + actor1.labelXOffset
   let centerX = leftOffset + Math.floor(labelWidth / 2)
-  let centerY = layout.topOffset + labelHeight
+  let centerY = layout.topMargin + labelHeight
 
   it('should create a new actor', function () {
     equal(actor.name, actorName[2])
@@ -79,11 +79,11 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg actor labelXOffset', function () {
-    equal(actor.labelXOffset, layout.leftOffset + labelWidth)
+    equal(actor.labelXOffset, layout.leftMargin + labelWidth)
   })
 
   it('should calculate svg actor labelY', function () {
-    equal(actor.labelY(0), layout.topOffset)
+    equal(actor.labelY(0), layout.topMargin)
   })
 
   it('should calculate svg actor left offset', function () {
@@ -96,7 +96,7 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg actor textY', function () {
-    const textY = layout.topOffset + layout.fontSize + layout.topPad - layout.strokeWidth
+    const textY = layout.topMargin + layout.fontSize + layout.topPad - layout.strokeWidth
     equal(actor.textY(0), textY)
   })
 })
