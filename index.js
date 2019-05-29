@@ -52,7 +52,7 @@ class SvgActor {
   }
 
   evalLabelWidth (labelText=this.name) {
-    let textWidth = Math.floor(pixelWidth(labelText, { size: this.layout.fontSize }))
+    let textWidth = Math.floor(pixelWidth(labelText, { font: this.layout.font, size: this.layout.fontSize }))
     return this.layout.leftPad * 2 + textWidth
   }
 

@@ -6,6 +6,8 @@ const actorName = ['SvgActor1','SvgActor2','SvgActor3']
 
 const layout = {
   arrowHeadSize: 7,
+  fillColor: 'lightyellow',
+  font: 'courier new',
   fontSize: 16,  
   halfBodyWidth: 10,
   initBodyHeight: 180,
@@ -25,7 +27,7 @@ describe('vue-actor-group', function () {
   let actor = factory.new(actorName[2], actor2)
   console.log('name : '  + actor.name + ' , sibling : ' + actor.siblingL.name)
   console.log(actor.name + ' , halfLabelWidth : ' + actor.halfLabelWidth)
-  let labelWidth = layout.leftPad * 2 + Math.floor(pixelWidth(actor.name, { size: layout.fontSize }))
+  let labelWidth = layout.leftPad * 2 + Math.floor(pixelWidth(actor.name, { font: layout.font, size: layout.fontSize }))
   let labelHeight = layout.fontSize + layout.topPad * 2
   let leftOffset = layout.leftOffset + actor2.labelXOffset + actor1.labelXOffset
   let centerX = leftOffset + Math.floor(labelWidth / 2)
