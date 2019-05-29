@@ -7,9 +7,9 @@ class SvgActor {
     this.states = []
     this.transitions = {}
     if (layout) this.layout = layout
-    this.halfLabelWidth = Math.floor(this.evalLabelWidth() / 2)
+    this.halfLabelWidth = this.evalHalfLabelWidth()
     this.centerX = this.evalCenterX
-    }
+  }
 
   get arrowX1() {
     return this.centerX + this.layout.halfBodyWidth
@@ -51,9 +51,9 @@ class SvgActor {
     return this.halfLabelWidth * 2
   }
 
-  evalLabelWidth (labelText=this.name) {
-    let textWidth = Math.floor(pixelWidth(labelText, { font: this.layout.font, size: this.layout.fontSize }))
-    return this.layout.leftPad * 2 + textWidth
+  evalHalfLabelWidth (labelText=this.name) {
+    let textWidth = pixelWidth(labelText, { font: this.layout.font, size: this.layout.fontSize })
+    return this.layout.leftPad + Math.round(textWidth / 2)
   }
 
   get labelX() {
@@ -61,7 +61,7 @@ class SvgActor {
   }
 
   get labelXOffset() {
-    return this.layout.leftOffset + this.halfLabelWidth * 2
+    return this.layout.leftOffset + this.labelWidth
   }
 
   labelY (relOffset) {
