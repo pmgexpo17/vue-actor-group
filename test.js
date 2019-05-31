@@ -27,10 +27,11 @@ describe('vue-actor-group', function () {
   let actor = factory.new(actorName[2], actor2)
   console.log('name : '  + actor.name + ' , sibling : ' + actor.siblingL.name)
   console.log(actor.name + ' , halfLabelWidth : ' + actor.halfLabelWidth)
-  let labelWidth = layout.leftPad * 2 + Math.floor(pixelWidth(actor.name, { font: layout.font, size: layout.fontSize }))
+  let halfLabelWidth = layout.leftPad + Math.round(pixelWidth(actor.name, { font: layout.font, size: layout.fontSize }) / 2)
+  let labelWidth = halfLabelWidth * 2
   let labelHeight = layout.fontSize + layout.topPad * 2
-  let leftOffset = layout.leftMargin + actor2.labelXOffset + actor1.labelXOffset
-  let centerX = leftOffset + Math.floor(labelWidth / 2)
+  let leftOffset = Math.round(layout.leftMargin / 2) + actor1.labelXOffset + actor2.labelXOffset
+  let centerX = leftOffset + halfLabelWidth
   let centerY = layout.topMargin + labelHeight
 
   it('should create a new actor', function () {
@@ -91,7 +92,7 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg actor textX', function () {
-    const textX = centerX - Math.ceil(labelWidth / 2) + layout.leftPad
+    const textX = centerX - halfLabelWidth + layout.leftPad
     equal(actor.textX,  textX)
   })
 

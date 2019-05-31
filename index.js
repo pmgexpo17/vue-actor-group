@@ -73,7 +73,7 @@ class SvgActor {
   }
 
   get leftOffset() {
-    let leftOffset = this.layout.leftMargin
+    let leftOffset = Math.round(this.layout.leftMargin / 2)
     let nextActor = this.siblingL
     while (nextActor) {
       leftOffset += nextActor.labelXOffset
