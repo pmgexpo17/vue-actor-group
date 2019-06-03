@@ -18,19 +18,34 @@ const layout = {
   strokeWidth: 2
 }
 
+const packet1 = {
+  actorFrom: 'SvgActor1',
+  programIndex: 0,
+  type: 'state',
+  value: 'STATE_ONE',
+}
+
+const packet2 = {
+  actorFrom: 'SvgActor1',
+  actorTo: 'SvgActor2',
+  programIndex: 0,
+  type: 'state',
+  value: 'calling actor2 micro-service ...',
+}
+
 describe('vue-actor-group', function () {
 
   factory.setLayout(layout)
   let actor1 = factory.new(actorName[0])
-  let actor2 = factory.new(actorName[1], actor1)
-  console.log('name : '  + actor2.name + ' , sibling : ' + actor2.siblingL.name)
-  let actor = factory.new(actorName[2], actor2)
-  console.log('name : '  + actor.name + ' , sibling : ' + actor.siblingL.name)
-  console.log(actor.name + ' , halfLabelWidth : ' + actor.halfLabelWidth)
+  let actor2 = factory.new(actorName[1])
+  console.log('name : '  + actor2.name + ' , sibling : ' + actor2.prev.name)  
+  let actor = factory.new(actorName[2])
+  console.log('name : '  + actor.name + ' , sibling : ' + actor.prev.name)
   let halfLabelWidth = layout.leftPad + Math.round(pixelWidth(actor.name, { font: layout.font, size: layout.fontSize }) / 2)
+  console.log(actor.name + ' , halfLabelWidth : ' + halfLabelWidth)  
   let labelWidth = halfLabelWidth * 2
   let labelHeight = layout.fontSize + layout.topPad * 2
-  let leftOffset = Math.round(layout.leftMargin / 2) + actor1.labelXOffset + actor2.labelXOffset
+  let leftOffset = Math.round(layout.leftMargin * 2.5) + labelWidth + labelWidth
   let centerX = leftOffset + halfLabelWidth
   let centerY = layout.topMargin + labelHeight
 
@@ -38,8 +53,12 @@ describe('vue-actor-group', function () {
     equal(actor.name, actorName[2])
   })
 
+  it('should calculate svg center x', function () {
+    equal(actor.centerX, centerX)
+  })
+
   it('should calculate svg arrow start x', function () {
-    equal(actor.arrowX1, actor.centerX + layout.halfBodyWidth)
+    equal(actor.arrowX1, centerX + layout.halfBodyWidth)
   })
 
   it('should calculate svg actor body height', function () {
@@ -80,7 +99,7 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg actor labelXOffset', function () {
-    equal(actor.labelXOffset, layout.leftMargin + labelWidth)
+    equal(actor.labelXOffset(), layout.leftMargin + labelWidth)
   })
 
   it('should calculate svg actor labelY', function () {
@@ -88,7 +107,7 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg actor left offset', function () {
-    equal(actor.leftOffset, leftOffset)
+    equal(actor.leftOffset(actor1), leftOffset)
   })
 
   it('should calculate svg actor textX', function () {
@@ -100,4 +119,21 @@ describe('vue-actor-group', function () {
     const textY = layout.topMargin + layout.fontSize + layout.topPad - layout.strokeWidth
     equal(actor.textY(0), textY)
   })
+
+  it('should find a member by actorName', function () {
+    equal(actor1.findMember('SvgActor2').name, 'SvgActor2')
+  })
+
+  it('should add a state artifact successfully', function () {
+    const artifact = factory.addArtifact(packet1)[0]
+    const bodyYOffset = actor1.bodyY + layout.topMargin
+    equal(bodyYOffset, artifact.bodyYOffset)
+  })
+
+  it('should add a transition artifact successfully', function () {
+    const artifact = factory.addArtifact(packet2)[1]
+    const bodyYOffset = actor1.profile[0].bodyYOffset + layout.topMargin + actor1.labelHeight
+    equal(bodyYOffset, artifact.bodyYOffset)
+  })
+
 })
