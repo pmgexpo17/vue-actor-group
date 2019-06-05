@@ -48,6 +48,7 @@ describe('vue-actor-group', function () {
   let leftOffset = Math.round(layout.leftMargin * 2.5) + labelWidth + labelWidth
   let centerX = leftOffset + halfLabelWidth
   let centerY = layout.topMargin + labelHeight
+  let profile = []
 
   it('should create a new actor', function () {
     equal(actor.name, actorName[2])
@@ -125,14 +126,15 @@ describe('vue-actor-group', function () {
   })
 
   it('should add a state artifact successfully', function () {
-    const artifact = factory.addArtifact(packet1)[0]
+    const artifact = factory.addArtifact(packet1)
+    profile.push(artifact)
     const bodyYOffset = actor1.bodyY + layout.topMargin
     equal(bodyYOffset, artifact.bodyYOffset)
   })
 
   it('should add a transition artifact successfully', function () {
-    const artifact = factory.addArtifact(packet2)[1]
-    const bodyYOffset = actor1.profile[0].bodyYOffset + layout.topMargin + actor1.labelHeight
+    const artifact = factory.addArtifact(packet2)
+    const bodyYOffset = profile[0].bodyYOffset + layout.topMargin + actor1.labelHeight
     equal(bodyYOffset, artifact.bodyYOffset)
   })
 

@@ -128,13 +128,14 @@ class SvgActor {
       value: packet.value
     }
     if (packet.type == 'transition')
-        Object.assign(artifact, state.arrowCoords(packet.value))
+        Object.assign(artifact, this.arrowCoords(packet))
     artifact.bodyYOffset += this.layout.topMargin
     if (this.prevArtifact)
       artifact.bodyYOffset += this.labelHeight
     this.prevArtifact = artifact
-    this.profile.push(artifact)
-    return this.profile
+    //this.profile.push(artifact)
+    //return this.profile
+    return artifact
   }
 
   findMember(actorName) {
