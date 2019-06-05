@@ -121,16 +121,15 @@ class SvgActor {
     let artifact = {            
       index: packet.programIndex,
       actorFrom: this.name,
-      bodyYOffset: (this.prevArtifact) ? this.prevArtifact.bodyYOffset : this.bodyY,
+      bodyYOffset: (packet.programIndex) ? packet.bodyYOffset : this.bodyY,
       type: packet.type,
       value: packet.value
     }
     if (packet.type == 'transition')
         Object.assign(artifact, this.arrowCoords(packet))
     artifact.bodyYOffset += this.layout.topMargin
-    if (this.prevArtifact)
+    if (packet.programIndex)
       artifact.bodyYOffset += this.labelHeight
-    this.prevArtifact = artifact
     return artifact
   }
 
@@ -153,9 +152,8 @@ let factory = {
   first: null,
 
   // use prototype instead of a static property, set at startup
-  setClassVars(layout=null) {
+  setConfig(layout) {
     SvgActor.prototype.layout = layout
-    SvgActor.prototype.prevArtifact = null
   },
 
   new(name, layout=null) {
@@ -170,7 +168,11 @@ let factory = {
     if (!this.first)
       return []
     const actorFrom = this.first.findMember(packet.actorFrom)
-    return actorFrom.addArtifact(packet)    
+    return actorFrom.addArtifact(packet)
+  },
+
+  reset() {
+    this.first = null
   }
 }
 

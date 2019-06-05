@@ -28,14 +28,14 @@ const packet1 = {
 const packet2 = {
   actorFrom: 'SvgActor1',
   actorTo: 'SvgActor2',
-  programIndex: 0,
+  programIndex: 1,
   type: 'state',
   value: 'calling actor2 micro-service ...',
 }
 
 describe('vue-actor-group', function () {
 
-  factory.setClassVars(layout)
+  factory.setConfig(layout)
   let actor1 = factory.new(actorName[0])
   let actor2 = factory.new(actorName[1])
   console.log('name : '  + actor2.name + ' , sibling : ' + actor2.prev.name)  
@@ -133,6 +133,7 @@ describe('vue-actor-group', function () {
   })
 
   it('should add a transition artifact successfully', function () {
+    packet2.bodyYOffset = profile[0].bodyYOffset
     const artifact = factory.addArtifact(packet2)
     const bodyYOffset = profile[0].bodyYOffset + layout.topMargin + actor1.labelHeight
     equal(bodyYOffset, artifact.bodyYOffset)
