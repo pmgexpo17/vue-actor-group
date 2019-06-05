@@ -4,7 +4,6 @@ class SvgActor {
   constructor(name, first, layout=null) {
     this.name = name
     this.prev = null
-    this.prevArtifact = null
     if (layout) this.layout = layout
     this.__init(first)
   }
@@ -154,8 +153,9 @@ let factory = {
   first: null,
 
   // use prototype instead of a static property, set at startup
-  setLayout(layout) {
+  setClassVars(layout=null) {
     SvgActor.prototype.layout = layout
+    SvgActor.prototype.prevArtifact = null
   },
 
   new(name, layout=null) {

@@ -35,7 +35,7 @@ const packet2 = {
 
 describe('vue-actor-group', function () {
 
-  factory.setLayout(layout)
+  factory.setClassVars(layout)
   let actor1 = factory.new(actorName[0])
   let actor2 = factory.new(actorName[1])
   console.log('name : '  + actor2.name + ' , sibling : ' + actor2.prev.name)  
