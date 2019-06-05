@@ -5,7 +5,6 @@ class SvgActor {
     this.name = name
     this.prev = null
     this.prevArtifact = null
-    this.profile = []
     if (layout) this.layout = layout
     this.__init(first)
   }
@@ -108,7 +107,7 @@ class SvgActor {
     let actorTo = this.findMember(packet.actorTo)
     let arrowCoords = {}
     const arrowSign = actorTo.centerX < this.centerX ? -1 : 1
-    arrowCoords.arrowX1 = actorFrom.centerX + (arrowSign * this.layout.halfBodyWidth)
+    arrowCoords.arrowX1 = this.centerX + (arrowSign * this.layout.halfBodyWidth)
     const adjustX = this.layout.halfBodyWidth + this.layout.arrowHeadSize + this.layout.strokeWidth
     arrowCoords.arrowX2 = actorTo.centerX - (arrowSign * adjustX)
     const textWidth = this.evalTextWidth(packet.value)
@@ -133,8 +132,6 @@ class SvgActor {
     if (this.prevArtifact)
       artifact.bodyYOffset += this.labelHeight
     this.prevArtifact = artifact
-    //this.profile.push(artifact)
-    //return this.profile
     return artifact
   }
 
