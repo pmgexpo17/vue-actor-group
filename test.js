@@ -20,6 +20,7 @@ const layout = {
 
 const packet1 = {
   actorFrom: 'SvgActor1',
+  bodyYOffset: 0,
   programIndex: 0,
   type: 'state',
   value: 'STATE_ONE',
@@ -28,6 +29,7 @@ const packet1 = {
 const packet2 = {
   actorFrom: 'SvgActor1',
   actorTo: 'SvgActor2',
+  bodyYOffset: 0,
   programIndex: 1,
   type: 'state',
   value: 'calling actor2 micro-service ...',
@@ -49,6 +51,7 @@ describe('vue-actor-group', function () {
   let centerX = leftOffset + halfLabelWidth
   let centerY = layout.topMargin + labelHeight
   let profile = []
+  let prevArtifact = null
 
   it('should create a new actor', function () {
     equal(actor.name, actorName[2])
@@ -63,8 +66,8 @@ describe('vue-actor-group', function () {
   })
 
   it('should calculate svg actor body height', function () {
-    const bodyHeight = layout.initBodyHeight - (layout.fontSize + layout.topPad * 2)
-    equal(actor.bodyHeight, bodyHeight)
+    equal(actor.bodyHeight(), layout.initBodyHeight)
+    equal(actor.bodyHeight(2), layout.initBodyHeight * 2)
   })
 
   it('should calculate svg actor body width', function () {
@@ -126,16 +129,18 @@ describe('vue-actor-group', function () {
   })
 
   it('should add a state artifact successfully', function () {
-    const artifact = factory.addArtifact(packet1)
-    profile.push(artifact)
+    // just a functional check, not a unit test
+    packet1.bodyYOffset = actor1.bodyY
+    const artifact = factory.addArtifact(packet1) 
+    prevArtifact = artifact
     const bodyYOffset = actor1.bodyY + layout.topMargin
     equal(bodyYOffset, artifact.bodyYOffset)
   })
 
   it('should add a transition artifact successfully', function () {
-    packet2.bodyYOffset = profile[0].bodyYOffset
+    packet2.bodyYOffset = prevArtifact.bodyYOffset
     const artifact = factory.addArtifact(packet2)
-    const bodyYOffset = profile[0].bodyYOffset + layout.topMargin + actor1.labelHeight
+    const bodyYOffset = prevArtifact.bodyYOffset + layout.topMargin + actor1.labelHeight
     equal(bodyYOffset, artifact.bodyYOffset)
   })
 

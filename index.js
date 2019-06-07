@@ -23,12 +23,8 @@ class SvgActor {
     return this.centerX + this.layout.halfBodyWidth
   }
 
-  get bodyHeight() {
-    return this.layout.initBodyHeight - this.labelHeight
-  }
-
-  get bodyHeight() {
-    return this.layout.initBodyHeight - this.labelHeight
+  bodyHeight(factor=1) {
+    return (factor * this.layout.initBodyHeight)
   }
 
   get bodyWidth() {
@@ -49,8 +45,9 @@ class SvgActor {
     return this.leftOffset(first) + this.halfLabelWidth
   }
 
-  centerY (relOffset) {
-    return this.layout.topMargin + this.labelHeight + relOffset
+  centerY(factor=0) {
+    let centerYTop = this.layout.topMargin + this.labelHeight
+    return (factor == 0) ? centerYTop : centerYTop + this.bodyHeight(factor) + 20
   }
 
   get labelHeight() {
@@ -78,8 +75,8 @@ class SvgActor {
     return (isFirst) ? Math.round(this.layout.leftMargin / 2) : this.layout.leftMargin + this.labelWidth
   }
 
-  labelY (relOffset) {
-    return this.layout.topMargin + relOffset
+  labelY(factor=0) {
+    return (factor == 0) ? this.layout.topMargin : this.centerY(factor)
   }
 
   leftOffset(first) {
@@ -98,8 +95,8 @@ class SvgActor {
     return this.centerX - this.halfLabelWidth  + this.layout.leftPad
   }
 
-  textY (relOffset) {
-    return this.layout.topMargin + this.layout.fontSize + this.layout.topPad - this.layout.strokeWidth + relOffset
+  textY(factor=0) {
+    return this.labelY(factor) + this.layout.fontSize + this.layout.topPad - this.layout.strokeWidth
   }
 
   arrowCoords(packet) {
@@ -118,18 +115,17 @@ class SvgActor {
   }
 
   addArtifact(packet) {
-    let artifact = {            
-      index: packet.programIndex,
-      actorFrom: this.name,
-      bodyYOffset: (packet.programIndex) ? packet.bodyYOffset : this.bodyY,
-      type: packet.type,
-      value: packet.value
-    }
+    let artifact = Object.assign({}, packet)
     if (packet.type == 'transition')
         Object.assign(artifact, this.arrowCoords(packet))
     artifact.bodyYOffset += this.layout.topMargin
+    // after the first item, add the labelHeight of the previous item
     if (packet.programIndex)
-      artifact.bodyYOffset += this.labelHeight
+      artifact.bodyYOffset += this.labelHeight    
+    // test if body space is exhausted by placement of this artifact
+    const bodyYLimit = this.centerY(artifact.bodyHtFactor) - 20 - this.labelHeight
+    if (artifact.bodyYOffset  > bodyYLimit)
+      artifact.bodyHtFactor++
     return artifact
   }
 
