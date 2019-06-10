@@ -169,7 +169,7 @@ let factory = {
 
   addArtifact(packet) {
     if (!this.first)
-      return []
+      return {}
     const actorFrom = this.first.findMember(packet.actorFrom)
     return actorFrom.addArtifact(packet)
   },
