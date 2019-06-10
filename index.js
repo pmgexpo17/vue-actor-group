@@ -106,12 +106,19 @@ class SvgActor {
     arrowCoords.arrowX1 = this.centerX + (arrowSign * this.layout.halfBodyWidth)
     const adjustX = this.layout.halfBodyWidth + this.layout.arrowHeadSize + this.layout.strokeWidth
     arrowCoords.arrowX2 = actorTo.centerX - (arrowSign * adjustX)
-    const textWidth = this.evalTextWidth(packet.value)
-    const textSpan = Math.abs(actorTo.centerX - this.centerX) - this.layout.halfBodyWidth * 2
-    const leftPad = Math.round((textSpan - textWidth) / 2)
-    arrowCoords.arrowTextX = leftPad + this.layout.halfBodyWidth
+    // A transition can span multiple actors. ArrowTextX leftpad is derived from a single span
+    // to avoid printing text that overlaps the body of an in-between actor
+    let centerXSpan = (arrowSign < 1) ? this.centerX - this.prev.centerX : actorTo.centerX - actorTo.prev.centerX
+    arrowCoords.arrowTextX = this.arrowTextX(packet, centerXSpan)
     arrowCoords.arrowTextX += (arrowSign < 1) ? actorTo.centerX  : this.centerX
     return arrowCoords
+  }
+
+  arrowTextX(packet, centerXSpan) {
+    const textWidth = this.evalTextWidth(packet.value)
+    const textSpan = centerXSpan - this.layout.halfBodyWidth * 2
+    const leftPad = Math.round((textSpan - textWidth) / 2)
+    return leftPad + this.layout.halfBodyWidth
   }
 
   addArtifact(packet) {
