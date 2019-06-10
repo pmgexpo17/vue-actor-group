@@ -32,6 +32,7 @@ class UmlProgram {
     addActor(actorName) {
         const actor = factory.new(actorName)
         actor.id = this.timestamp
+        actor.svgOpacity = this.prevArtifact.actorFrom ? 0.5 : 1
         this.actors[actorName] = actor
         let profile = {
             actorName: actorName, 
@@ -66,6 +67,7 @@ class UmlProgram {
         profile.items.push(artifact)
         this.profiles[profile.index] = profile
         this.program.push(this.actorFrom)
+        this.setHasFocus(artifact)
         this.prevArtifact = artifact
     }
 
@@ -76,6 +78,15 @@ class UmlProgram {
             if (name != this.actorFrom)
                 this.others.push({name: name,id: actor.id})
         }
+    }
+
+    setHasFocus(artifact) {
+        Object.keys(this.actors).forEach( (actorName) => {
+            if (artifact.type == 'transition')
+                this.actors[actorName].svgOpacity = (actorName == artifact.actorTo) ? 1 : 0.5
+            else
+                this.actors[actorName].svgOpacity = (actorName == artifact.actorFrom) ? 1 : 0.5
+        })
     }
 }
 
